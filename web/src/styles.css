@@ -1,0 +1,108 @@
+:root {
+  --bg: #0a0b0e;
+  --panel: #14161c;
+  --text: #e7e9ee;
+  --dim: #9aa0a6;
+  --accent: #5bd1c3;
+  --danger: #e2504a;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.site-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 20px;
+  border-bottom: 1px solid #1d2026;
+}
+
+.brand h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  letter-spacing: 0.5px;
+}
+
+.tagline {
+  margin: 4px 0 2px;
+  color: var(--dim);
+  max-width: 60ch;
+  font-size: 0.9rem;
+}
+
+.disclaimer {
+  margin: 2px 0 0;
+  color: #ff8a80;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.enter-vr {
+  background: var(--accent);
+  color: #06201d;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 20px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.enter-vr:hover {
+  filter: brightness(1.08);
+}
+
+.xr-note {
+  color: var(--dim);
+  font-size: 0.85rem;
+}
+
+.stage {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+}
+
+.stage canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.stage-hint {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 10px;
+  text-align: center;
+  margin: 0;
+  color: var(--dim);
+  font-size: 0.8rem;
+  pointer-events: none;
+}
