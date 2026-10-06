@@ -41,30 +41,6 @@ export function trustColor(word) {
 }
 
 // ---------------------------------------------------------------------------
-// Room / layout. One circular room; user stands in the middle and turns.
-// Stations are placed on a circle by angle (radians). Steps 1-3 populate the
-// Nodule Chamber and Quantum Core; the remaining angles are reserved so the
-// later dispatch (noise dial, repair bay, verdict deck) drops in without a
-// re-layout.
-// ---------------------------------------------------------------------------
-export const ROOM = {
-  radius: 3.0, // metres — wall radius
-  height: 3.0, // metres — wall height
-  spawnHeight: 1.6, // standing eye height for the XR origin (seated option later)
-  stationRadius: 1.9, // how far stations sit from centre
-}
-
-// Station placement angle (radians, 0 = +Z toward user's initial facing is -Z).
-// We face the user toward -Z at spawn, so angle 0 => directly ahead (-Z).
-export const STATIONS = {
-  noduleChamber: { angle: 0, label: 'Nodule Chamber' },
-  quantumCore: { angle: Math.PI / 2, label: 'Quantum Core' }, // to the right
-  noiseStorm: { angle: Math.PI, label: 'Noise Storm' }, // behind (later)
-  repairBay: { angle: (3 * Math.PI) / 2, label: 'Repair Bay' }, // to the left (later)
-  verdictDeck: { angle: Math.PI / 4, label: 'Verdict Deck' }, // (later)
-}
-
-// ---------------------------------------------------------------------------
 // Nodule Chamber — density-thresholded instanced voxels.
 // Volume is Uint8 28x28x28, row-major. We draw ONLY voxels whose density is
 // at or above DENSITY_THRESHOLD, as a single opaque InstancedMesh (SPEC
@@ -117,52 +93,37 @@ export const NOISE = {
 export const DISCLAIMER = 'Research prototype. Not a diagnosis.'
 
 // ---------------------------------------------------------------------------
-// NOISE STORM DIAL (station 3) — presentational knobs only. Detent *values*
-// come from the saved index.json noise_p2; the dial has one detent per level.
+// ONE GIANT SCAN — the single room. Presentational knobs only; every number
+// shown still comes from the saved JSON.
 // ---------------------------------------------------------------------------
-export const DIAL = {
-  centerHeight: 1.2, // dial centre height (chest height)
-  radius: 0.26, // knob radius (m)
-  arcDeg: 240, // total sweep from first to last detent
-  grabReach: 0.4, // controller must be within this of dial centre to grab
-  detentMarkerRadius: 0.035, // ray-clickable detent marker
-  detentRingRadius: 0.36, // markers sit on this radius
-  followDamp: 14, // knob easing toward its target angle (1/s)
-  colorDamp: 3, // slow colour fades, never flashes (< 3 Hz)
-  tintMax: 0.9, // red point-light intensity at max noise
-  tintHeight: 2.2, // red storm light height
-  hapticStrength: 0.6, // 0..1
-  hapticMs: 40,
+export const ROOM = {
+  spawnHeight: 1.6, // standing eye height (desktop preview camera)
+  width: 12, // x extent
+  depth: 10, // z extent
+  centerZ: -1.5, // room centre (spawn at 0,0,0 facing -Z)
+  height: 4,
+  limitX: 5.4, // locomotion clamp
+  limitZMin: -5.8,
+  limitZMax: 3.0,
 }
-
-// ---------------------------------------------------------------------------
-// REPAIR block — Repair Bay (SPEC station 4) presentational knobs only.
-// Every number SHOWN comes from index.json / the run / qec.json at runtime.
-// ---------------------------------------------------------------------------
-export const REPAIR = {
-  mitigationX: -0.72, // local x of the Mitigation pad group
-  correctionX: 0.55, // local x of the Error Correction pad group
-  padY: 0.95, // pad height (waist)
-  padRadius: 0.14,
-  padSegments: 20,
-  arrowSpacing: 0.2, // spacing of the 4 mini Bloch arrows on the mitigation pad
-  arrowY: 1.4,
-  pulseSeconds: 0.9, // blue pulse ring duration on mitigation toggle (<3 Hz)
-  tankWidth: 0.7,
-  tankHeight: 0.7,
-  tankDepth: 0.3,
-  tankY: 1.45, // tank centre height
-  tankOpenDamp: 6, // open/close fade-scale speed
-  qubitRadius: 0.07,
-  lightRadius: 0.03,
-  sphereSegments: 14,
-  leverX: 0.55, // lever track x, relative to the correction group
-  leverYMin: 1.1,
-  leverYMax: 1.75,
-  // Event replay phase lengths in seconds: error, syndrome, decode, result.
-  // Each >= 0.9 s so nothing changes faster than ~1 Hz (no flashing > 3 Hz).
-  phaseSeconds: [1.0, 1.0, 1.0, 1.6],
-  colorDamp: 8, // colour fade speed
-  hapticIntensity: 0.4,
-  hapticMs: 40,
+export const SCAN = {
+  position: [0, 1.75, -3.6],
+  scale: 5, // 0.34 m cube x5 = 1.7 m across
+  spin: 0.12, // rad/s, slow turn so the 3D shape reads
 }
+export const ORBIT = {
+  radius: 2.1, // qubit ring radius around the scan
+  speed: 0.18, // rad/s
+  sphereRadius: 0.3,
+  arrowScale: 6, // BlochArrow is drawn at 0.16 m per unit; scaled up for the room
+}
+export const CONSOLE = {
+  position: [0, 0.95, -1.5], // control desk, in front of the user
+  tilt: -0.5, // rad, leans toward the user
+  trackHalf: 0.95, // slider half-length
+  markerRadius: 0.09,
+  knobRadius: 0.13,
+  knobDamp: 12,
+}
+export const MOVE = { speed: 1.6, snapDegrees: 30, deadZone: 0.6 }
+export const WALL = { z: -6.4, y: 2.3, width: 4.6, height: 2.3 }
