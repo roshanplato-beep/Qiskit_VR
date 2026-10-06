@@ -155,11 +155,13 @@ export const CT = {
 export const SLICE_MONITOR = { position: [1.0, 1.75, -4.5], size: 1.0 }
 export const LUNG = { position: [-2.0, 2.0, -3.7], yaw: 0.3, scale: 0.8 }
 export const QUBITS = {
-  position: [2.6, 0, -2.5],
-  yaw: -0.7, // faces the spawn point
-  spacing: 0.5,
-  sphereRadius: 0.17,
-  arrowScale: 1.1, // BlochArrow draws 0.16 m per unit; keeps the arrow inside the sphere
-  height: 1.25,
+  position: [1.3, 0, -1.1], // front-right of spawn, in clear view
+  yaw: -0.87, // faces the spawn point
+  spacing: 0.55,
+  sphereRadius: 0.24,
+  arrowScale: 2.5, // BlochArrow draws 0.16 m per unit -> a full arrow is 0.4 m
+  height: 1.78,
+  minVisual: 0.25, // shortest visual arrow (fraction of full) so it never vanishes
+  floorRatio: 0.4, // saved |noisy|/|ideal| at or below this draws as the minimum
 }
 export const NOISE_TRACK = { half: 0.95, markerRadius: 0.05, knobRadius: 0.075, damp: 12 }

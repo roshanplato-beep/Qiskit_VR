@@ -262,36 +262,53 @@ function ClassicalMonitor({ run, patient }) {
   )
 }
 
+// Visual-only length mapping, for legibility. Direction comes straight from the
+// saved Bloch vector; length is the saved |noisy|/|ideal| ratio (1 at zero noise),
+// stretched so a real ~40% drop reads as a big shrink. No data values invented.
+function visualLen(v, ideal) {
+  const mi = Math.hypot(...(ideal ?? [0, 0, 0]))
+  if (!v || mi < 1e-6) return 0
+  const r = Math.hypot(...v) / mi
+  const k = Math.min(1, Math.max(0, (r - QUBITS.floorRatio) / (1 - QUBITS.floorRatio)))
+  return QUBITS.minVisual + (1 - QUBITS.minVisual) * k
+}
+const unit = (v, len) => {
+  const m = Math.hypot(...v)
+  return m < 1e-6 ? [0, 0, 0] : v.map((c) => (c / m) * len)
+}
+
 function Qubit({ n, x, ideal, current, color }) {
+  const full = useMemo(() => (ideal ? unit(ideal, 1) : null), [ideal])
+  const cur = useMemo(() => (current && ideal ? unit(current, visualLen(current, ideal)) : null), [current, ideal])
   return (
     <group position={[x, 0, 0]}>
       <mesh>
-        <sphereGeometry args={[QUBITS.sphereRadius, 16, 12]} />
-        <meshStandardMaterial color="#2b3350" roughness={0.4} transparent opacity={0.3} depthWrite={false} />
+        <sphereGeometry args={[QUBITS.sphereRadius, 20, 14]} />
+        <meshStandardMaterial color="#3a4a80" roughness={0.4} transparent opacity={0.25} depthWrite={false} />
       </mesh>
       <group scale={QUBITS.arrowScale}>
-        <BlochArrow vector={ideal} color={COLORS.ideal} ghost />
-        <BlochArrow vector={current} color={color} />
+        <BlochArrow vector={full} color={COLORS.ideal} ghost />
+        <BlochArrow vector={cur} color={color} />
       </group>
-      <Label size={0.07} color={COLORS.text} position={[0, -QUBITS.sphereRadius - 0.1, 0]}>{`Qubit ${n}`}</Label>
+      <Label size={0.1} color={COLORS.text} position={[0, -QUBITS.sphereRadius - 0.12, 0]}>{`Qubit ${n}`}</Label>
     </group>
   )
 }
 
-// 4-qubit analysis rack, angled toward the spawn point.
+// 4-qubit analysis rack, floating front-right of spawn, angled toward it.
 function QubitRack({ run, fixed, noise01 }) {
   const bloch = run?.bloch
   const arrows = fixed ? bloch?.mitigated : bloch?.noisy
   const color = fixed ? COLORS.fixed : noise01 > 0 ? COLORS.noisy : COLORS.ideal
-  const w = QUBITS.spacing * 3 + 0.5
+  const w = QUBITS.spacing * 3 + 0.6
   return (
     <group position={QUBITS.position} rotation={[0, QUBITS.yaw, 0]}>
-      <mesh position={[0, 0.5, -0.08]}>
-        <boxGeometry args={[0.1, 1.0, 0.1]} />
+      <mesh position={[0, 0.7, -0.05]}>
+        <boxGeometry args={[0.08, 1.4, 0.08]} />
         <meshStandardMaterial color="#2f3541" />
       </mesh>
-      <mesh position={[0, 0.95, -0.02]}>
-        <boxGeometry args={[w, 0.06, 0.3]} />
+      <mesh position={[0, 1.4, -0.05]}>
+        <boxGeometry args={[w, 0.05, 0.12]} />
         <meshStandardMaterial color="#3a404c" roughness={0.6} />
       </mesh>
       <group position={[0, QUBITS.height, 0]}>
@@ -306,13 +323,13 @@ function QubitRack({ run, fixed, noise01 }) {
           />
         ))}
       </group>
-      <Label size={0.09} color={COLORS.accent} position={[0, 1.78, 0]} maxWidth={2.2}>
-        QUBIT READOUT
+      <Label size={0.1} color={COLORS.accent} position={[0, 2.4, 0]} maxWidth={2.2}>
+        QUBITS · watch the arrows
       </Label>
-      <Label size={0.075} color={COLORS.text} position={[0, 1.6, 0]} maxWidth={2.3}>
-        4 qubits read the scan. Watch the arrows shrink as noise rises.
+      <Label size={0.075} color={COLORS.text} position={[0, 1.3, 0]} maxWidth={2.3}>
+        More noise = shorter arrows. FIX grows them back.
       </Label>
-      <Label size={0.07} color={COLORS.textDim} position={[0, 0.78, 0]} maxWidth={2.3}>
+      <Label size={0.07} color={COLORS.textDim} position={[0, 1.18, 0]} maxWidth={2.3}>
         Grey ghost = ideal · Red = noisy · Blue = fixed
       </Label>
     </group>
@@ -452,7 +469,7 @@ export default function VRRoom() {
             <group position={[0, LUNG.position[1], 0]} scale={LUNG.scale}>
               <Lung />
               <Label size={0.085} color={COLORS.textDim} position={[0, -0.7, 0.1]} maxWidth={1.8}>
-                LUNG (orientation only). Glow = where the nodule sits
+                LUNG (orientation only). Bright orange glow = the nodule
               </Label>
             </group>
           </group>

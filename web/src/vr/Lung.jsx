@@ -6,6 +6,7 @@
 
 import { useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
+import * as THREE from 'three'
 
 // [x, y, z, sx, sy, sz] ellipsoid lobes in a ~1 m tall frame (patient facing +z)
 const LOBES = [
@@ -15,7 +16,7 @@ const LOBES = [
   [0.27, 0.1, 0, 0.2, 0.42, 0.2], // left upper
   [0.27, -0.25, -0.04, 0.2, 0.3, 0.22], // left lower
 ]
-export const NODULE_AT = [-0.31, -0.2, 0.06]
+export const NODULE_AT = [-0.3, -0.2, 0.02] // inside the right lower lobe
 
 function Tube({ from, to, r }) {
   const dx = to[0] - from[0], dy = to[1] - from[1]
@@ -31,7 +32,7 @@ function Tube({ from, to, r }) {
 export default function Lung(props) {
   const glow = useRef()
   useFrame(({ clock }) => {
-    if (glow.current) glow.current.scale.setScalar(1 + 0.12 * Math.sin(clock.elapsedTime * 2.0))
+    if (glow.current) glow.current.scale.setScalar(1 + 0.15 * Math.sin(clock.elapsedTime * 5.5)) // ~0.9 Hz, below 3 Hz
   })
   return (
     <group {...props}>
@@ -45,14 +46,14 @@ export default function Lung(props) {
       <Tube from={[0, 0.34, 0]} to={[-0.17, 0.2, 0]} r={0.017} />
       <Tube from={[0, 0.34, 0]} to={[0.17, 0.2, 0]} r={0.017} />
       {/* the nodule: small bright core + soft halo */}
-      <group position={NODULE_AT}>
+      <group position={NODULE_AT} renderOrder={2}>
         <mesh>
-          <sphereGeometry args={[0.035, 14, 10]} />
-          <meshBasicMaterial color="#ffd27a" />
+          <sphereGeometry args={[0.06, 16, 12]} />
+          <meshBasicMaterial color="#fff2c4" />
         </mesh>
-        <mesh ref={glow}>
-          <sphereGeometry args={[0.07, 14, 10]} />
-          <meshBasicMaterial color="#ffb347" transparent opacity={0.25} depthWrite={false} />
+        <mesh ref={glow} renderOrder={3}>
+          <sphereGeometry args={[0.105, 16, 12]} />
+          <meshBasicMaterial color="#ff9a1f" transparent opacity={0.5} depthWrite={false} blending={THREE.AdditiveBlending} />
         </mesh>
       </group>
     </group>

@@ -47,7 +47,7 @@ export default function App() {
 
       <main className="stage">
         <Canvas
-          camera={{ position: [0, ROOM.spawnHeight, 0.001], fov: 65, near: 0.01, far: 50 }}
+          camera={{ position: [0, ROOM.spawnHeight, 0.001], fov: 65, near: 0.1, far: 35 }}
           dpr={[1, 1.5]}
         >
           <color attach="background" args={['#0a0b0e']} />

@@ -32,11 +32,12 @@ export function Shell({ tint }) {
       {/* floor (carpet) */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, R.centerZ]}>
         <planeGeometry args={[R.width, R.depth]} />
-        <meshStandardMaterial color="#2c3039" roughness={1} />
+        <meshStandardMaterial color="#2c3039" roughness={1} polygonOffset polygonOffsetFactor={-2} polygonOffsetUnits={-2} />
       </mesh>
       {/* walls + ceiling */}
-      <mesh position={[0, R.height / 2, R.centerZ]}>
-        <boxGeometry args={[R.width, R.height, R.depth]} />
+      {/* shell box is sunk 0.05 m so its own floor face never shares the carpet's plane (was z-fighting) */}
+      <mesh position={[0, R.height / 2 - 0.025, R.centerZ]}>
+        <boxGeometry args={[R.width, R.height + 0.05, R.depth]} />
         <meshStandardMaterial color={WALL} roughness={1} side={THREE.BackSide} />
       </mesh>
       {/* baseboard glow strip along the back wall */}
