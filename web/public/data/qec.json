@@ -1,0 +1,325 @@
+{
+ "note": "3-qubit repetition codes under independent X (bit-flip code) or Z (phase-flip code) noise of probability p per data qubit, majority-vote decode. Fidelity is for the basis state each code protects (|0> and |+>). Events are sampled with a fixed seed, conditioned on at least one physical flip. These codes protect against one error type only; this demo does not repair a scan.",
+ "break_even_p": 0.5,
+ "p_levels": [
+  0.02,
+  0.1,
+  0.25,
+  0.5,
+  0.65
+ ],
+ "rows": [
+  {
+   "p": 0.02,
+   "unprotected": 0.98,
+   "bitflip_code": 0.9988159999999999,
+   "phaseflip_code": 0.9988160000000011
+  },
+  {
+   "p": 0.1,
+   "unprotected": 0.9,
+   "bitflip_code": 0.9720000000000001,
+   "phaseflip_code": 0.9720000000000013
+  },
+  {
+   "p": 0.25,
+   "unprotected": 0.75,
+   "bitflip_code": 0.84375,
+   "phaseflip_code": 0.8437500000000011
+  },
+  {
+   "p": 0.5,
+   "unprotected": 0.5,
+   "bitflip_code": 0.5,
+   "phaseflip_code": 0.5000000000000007
+  },
+  {
+   "p": 0.65,
+   "unprotected": 0.35,
+   "bitflip_code": 0.28174999999999994,
+   "phaseflip_code": 0.2817500000000003
+  }
+ ],
+ "events": [
+  {
+   "p": 0.02,
+   "flips": [
+    1,
+    0,
+    0
+   ],
+   "syndrome": [
+    1,
+    0
+   ],
+   "corrected_qubit": 0,
+   "logical_error": false
+  },
+  {
+   "p": 0.02,
+   "flips": [
+    0,
+    0,
+    1
+   ],
+   "syndrome": [
+    0,
+    1
+   ],
+   "corrected_qubit": 2,
+   "logical_error": false
+  },
+  {
+   "p": 0.02,
+   "flips": [
+    0,
+    1,
+    0
+   ],
+   "syndrome": [
+    1,
+    1
+   ],
+   "corrected_qubit": 1,
+   "logical_error": false
+  },
+  {
+   "p": 0.02,
+   "flips": [
+    1,
+    0,
+    0
+   ],
+   "syndrome": [
+    1,
+    0
+   ],
+   "corrected_qubit": 0,
+   "logical_error": false
+  },
+  {
+   "p": 0.1,
+   "flips": [
+    1,
+    0,
+    0
+   ],
+   "syndrome": [
+    1,
+    0
+   ],
+   "corrected_qubit": 0,
+   "logical_error": false
+  },
+  {
+   "p": 0.1,
+   "flips": [
+    0,
+    0,
+    1
+   ],
+   "syndrome": [
+    0,
+    1
+   ],
+   "corrected_qubit": 2,
+   "logical_error": false
+  },
+  {
+   "p": 0.1,
+   "flips": [
+    1,
+    0,
+    0
+   ],
+   "syndrome": [
+    1,
+    0
+   ],
+   "corrected_qubit": 0,
+   "logical_error": false
+  },
+  {
+   "p": 0.1,
+   "flips": [
+    1,
+    0,
+    0
+   ],
+   "syndrome": [
+    1,
+    0
+   ],
+   "corrected_qubit": 0,
+   "logical_error": false
+  },
+  {
+   "p": 0.25,
+   "flips": [
+    0,
+    0,
+    1
+   ],
+   "syndrome": [
+    0,
+    1
+   ],
+   "corrected_qubit": 2,
+   "logical_error": false
+  },
+  {
+   "p": 0.25,
+   "flips": [
+    0,
+    0,
+    1
+   ],
+   "syndrome": [
+    0,
+    1
+   ],
+   "corrected_qubit": 2,
+   "logical_error": false
+  },
+  {
+   "p": 0.25,
+   "flips": [
+    1,
+    1,
+    0
+   ],
+   "syndrome": [
+    0,
+    1
+   ],
+   "corrected_qubit": 2,
+   "logical_error": true
+  },
+  {
+   "p": 0.25,
+   "flips": [
+    1,
+    1,
+    0
+   ],
+   "syndrome": [
+    0,
+    1
+   ],
+   "corrected_qubit": 2,
+   "logical_error": true
+  },
+  {
+   "p": 0.5,
+   "flips": [
+    1,
+    0,
+    1
+   ],
+   "syndrome": [
+    1,
+    1
+   ],
+   "corrected_qubit": 1,
+   "logical_error": true
+  },
+  {
+   "p": 0.5,
+   "flips": [
+    0,
+    1,
+    1
+   ],
+   "syndrome": [
+    1,
+    0
+   ],
+   "corrected_qubit": 0,
+   "logical_error": true
+  },
+  {
+   "p": 0.5,
+   "flips": [
+    0,
+    0,
+    1
+   ],
+   "syndrome": [
+    0,
+    1
+   ],
+   "corrected_qubit": 2,
+   "logical_error": false
+  },
+  {
+   "p": 0.5,
+   "flips": [
+    0,
+    1,
+    0
+   ],
+   "syndrome": [
+    1,
+    1
+   ],
+   "corrected_qubit": 1,
+   "logical_error": false
+  },
+  {
+   "p": 0.65,
+   "flips": [
+    0,
+    0,
+    1
+   ],
+   "syndrome": [
+    0,
+    1
+   ],
+   "corrected_qubit": 2,
+   "logical_error": false
+  },
+  {
+   "p": 0.65,
+   "flips": [
+    1,
+    1,
+    1
+   ],
+   "syndrome": [
+    0,
+    0
+   ],
+   "corrected_qubit": null,
+   "logical_error": true
+  },
+  {
+   "p": 0.65,
+   "flips": [
+    1,
+    0,
+    1
+   ],
+   "syndrome": [
+    1,
+    1
+   ],
+   "corrected_qubit": 1,
+   "logical_error": true
+  },
+  {
+   "p": 0.65,
+   "flips": [
+    0,
+    0,
+    1
+   ],
+   "syndrome": [
+    0,
+    1
+   ],
+   "corrected_qubit": 2,
+   "logical_error": false
+  }
+ ]
+}

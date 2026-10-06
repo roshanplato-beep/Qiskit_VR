@@ -1,0 +1,33 @@
+# Dependencies
+node_modules/
+web/node_modules/
+
+# Build output
+web/dist/
+dist/
+
+# Vite / local
+.vite/
+*.local
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Editor / OS
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Python (precompute)
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Raw source dataset (29MB MedMNIST download, not a QURE build output).
+# Kept on disk but out of git history so later Vercel/GitHub pushes stay lean.
+# The FROZEN derived outputs in web/public/data/ ARE committed.
+precompute/data/*.npz
