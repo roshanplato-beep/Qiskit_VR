@@ -9,7 +9,7 @@ import * as THREE from 'three'
 import { COLORS, READING, DESK } from './vrConfig.js'
 
 const R = READING.room
-const WALL = '#2a2f39'
+const WALL = '#505a6b'
 const TRIM = '#161a20'
 
 function Box({ p, s, color, rough = 0.9, emissive, ei = 0 }) {
@@ -32,7 +32,7 @@ export function Shell({ tint }) {
       {/* floor (carpet) */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, R.centerZ]}>
         <planeGeometry args={[R.width, R.depth]} />
-        <meshStandardMaterial color="#1b1e24" roughness={1} />
+        <meshStandardMaterial color="#2c3039" roughness={1} />
       </mesh>
       {/* walls + ceiling */}
       <mesh position={[0, R.height / 2, R.centerZ]}>

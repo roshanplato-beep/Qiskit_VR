@@ -135,7 +135,7 @@ export const WALL = { z: -6.4, y: 2.3, width: 4.6, height: 2.3 }
 // from there with no overlaps.
 // ---------------------------------------------------------------------------
 export const READING = {
-  room: { width: 9, depth: 7, height: 3.1, centerZ: -1.1 },
+  room: { width: 9, depth: 7, height: 3.4, centerZ: -1.1 },
   limit: { x: 4.0, zMin: -2.9, zMax: 2.0 },
   // walkable obstacle: the desk footprint (centre x/z + half extents)
   deskBox: { x: 0, z: -1.5, hx: 1.8, hz: 0.55 },

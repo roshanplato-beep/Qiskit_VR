@@ -322,12 +322,12 @@ function QubitRack({ run, fixed, noise01 }) {
 // Purpose poster, top of the back wall.
 function Poster() {
   return (
-    <group position={[0, 2.75, BACK_Z + 0.03]}>
-      <Panel width={5.2} height={0.62} color="#12151b" opacity={1} />
-      <Label size={0.15} color={COLORS.text} position={[0, 0.14, 0.003]} maxWidth={5}>
+    <group position={[0, 2.9, BACK_Z + 0.03]}>
+      <Panel width={5.2} height={0.8} color="#12151b" opacity={1} />
+      <Label size={0.15} color={COLORS.text} position={[0, 0.27, 0.003]} maxWidth={5}>
         1 READ the CT  →  2 add NOISE  →  3 press FIX
       </Label>
-      <Label size={0.12} color={COLORS.accent} position={[0, -0.08, 0.003]} maxWidth={5}>
+      <Label size={0.12} color={COLORS.accent} position={[0, 0.03, 0.003]} maxWidth={5}>
         QURE Lab explains how far you can trust a noisy quantum computer's medical answer.
       </Label>
       <Label size={0.1} color={COLORS.textDim} position={[0, -0.22, 0.003]} maxWidth={5}>
@@ -366,12 +366,6 @@ function CTStation({ volume, slice, setSlice, texture, patient }) {
           </mesh>
         </DragTrack>
       </group>
-      <Label size={0.1} color={COLORS.accent} position={[x, 2.35, z]} maxWidth={1.6}>
-        CT VOLUME
-      </Label>
-      <Label size={0.075} color={COLORS.textDim} position={[x, 2.22, z]} maxWidth={1.8}>
-        {patient ? `patient ${patient.sample_id}` : ''}
-      </Label>
     </group>
   )
 }
@@ -457,11 +451,8 @@ export default function VRRoom() {
             </mesh>
             <group position={[0, LUNG.position[1], 0]} scale={LUNG.scale}>
               <Lung />
-              <Label size={0.1} color={COLORS.accent} position={[0, 0.72, 0.1]} maxWidth={1.6}>
-                LUNG (orientation only)
-              </Label>
               <Label size={0.085} color={COLORS.textDim} position={[0, -0.7, 0.1]} maxWidth={1.8}>
-                Glow = where the nodule sits
+                LUNG (orientation only). Glow = where the nodule sits
               </Label>
             </group>
           </group>
@@ -485,7 +476,7 @@ export default function VRRoom() {
           <QubitRack run={data.run} fixed={fixed} noise01={noise01} />
 
           <DisclaimerPlate position={[0, 0.92, DESK.z + 0.6]} rotation={[-1.0, 0, 0]} />
-          <DisclaimerPlate position={[0, 3.0, BACK_Z + 0.03]} scale={[1.8, 1.8, 1]} />
+          <DisclaimerPlate position={[2.3, 2.5, BACK_Z + 0.03]} scale={[1.6, 1.6, 1]} />
         </>
       )}
     </>
