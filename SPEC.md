@@ -19,7 +19,7 @@ A web app showing how far you can trust a quantum medical answer. A 4-qubit Qisk
 - **HTTPS:** WebXR needs HTTPS. Design for the deployed Vercel URL. For local headset testing use `vite --host` with a local HTTPS plugin, or `adb reverse` so localhost counts as secure. Document exact steps in the README.
 - Page HTML does not appear inside the headset. All VR labels, cards and charts must be 3D text (drei `Text`) and plain meshes.
 - Reuse the website's 3D components (nodule, Bloch spheres, verdict) as **shared components**. VR mode is a wrapper, not a rewrite.
-- No locomotion, no teleport, no camera shake. Fixed spawn at standing height, with a seated option. The user turns to face stations.
+- Locomotion: left-stick smooth walk + right-stick snap turn only (no teleport, no camera shake). Standing spawn.
 - Controller ray + trigger + grip must be enough for everything. Hand tracking optional, never required.
 - No flashing faster than 3 Hz. Smooth fades for colour changes.
 - Text at least 2 degrees tall at arm's length, on curved panels facing the user.
@@ -35,14 +35,19 @@ Real files already exist in `web/public/data/`:
 
 **Trust verdict:** spec says if a per-run `trust` field is missing, show a clearly-labelled placeholder and flag it in console; do NOT invent a rule. NOTE: the patient JSON has no per-run `trust` field, BUT `index.json` provides an explicit `trust_rule` string. Apply that documented rule (it is not invented). If `index.json.trust_rule` is ever absent, fall back to the placeholder behaviour.
 
-## The VR world: one circular room, five stations
-User stands in the middle and turns to face each station; everything reachable from spawn.
+## Purpose (what the room must teach)
+QURE Lab is an **explainer, not a diagnostic tool**. It shows how much you can trust a *noisy* quantum computer's medical answer. The flow a first-timer should get: (1) a quantum model reads a real CT lung nodule, (2) hardware **noise** erodes its confidence (Bloch arrows shrink, the verdict degrades), (3) error mitigation (**FIX**) partially recovers it, next to a plain classical model. Takeaway: noisy quantum answers need mitigation before you would trust them. A poster on the back wall states this.
 
-1. **Nodule Chamber.** 3D nodule floats at chest height on a pedestal. Grip to rotate; two-hand grip move apart/together to scale (clamped); drag a slice-plane handle to light a cross-section. A card shows patient ID + classical probability. A patient picker (point + trigger on cards) reloads everything from saved JSON.
-2. **Quantum Core.** Four qubit spheres orbit a glowing ring, one per PCA feature, each holding a Bloch arrow from `bloch`. An Analyze button streams particles from the nodule into the spheres and settles the arrows. Show the ideal arrow as a faint ghost so the shrink is visible; label shrink as "relative to ideal" (entanglement already shortens the ideal arrow).
-3. **Noise Storm (hero interaction).** A large physical dial with 5 detents, one per saved noise level. Turning it tints the room red, shrinks arrows, detunes the hum, updates the trust light. Snap to detents so shown value always matches a saved run exactly.
-4. **Repair Bay.** A Mitigation pad (readout + ZNE): arrows regrow with a blue pulse, a badge shows the 3x circuit cost. An Error Correction pad opens a tank with 3 data qubits, 2 syndrome lights, 1 logical qubit; an error-rate lever replays saved syndrome events, shows the decoder fixing a flip, and shows the code failing past break-even.
-5. **Verdict Deck.** A curved board with the trust triplet (ideal grey, noisy red, fixed blue) beside the classical model in white, the trust verdict (green/amber/red), and a one-line template explanation built from the numbers (no LLM). The research-prototype plate sits at the top.
+## The VR world: one radiology reading room (current design)
+Replaces the earlier 5-station circular room and the "One Giant Scan" layout. One walkable, dim, clinical room. Realism comes from materials and layout (matte walls, carpet, ceiling light panels, desk, chair, monitors), not effects. Spawn (0,0,0) facing -Z; everything is readable from spawn and no panel overlaps the CT volume or lung from there. All labels are fixed-orientation drei `Text` on panels (no billboards, so no mirrored text).
+
+- **Desk (centre front):** two monitors. Left = quantum verdict (TRUST / CAUTION / REFER via `resolveTrust`, green/amber/red; "N% sure it is malignant/benign"; plain-language meaning). Right = comparison: classical model (logistic and SVM %) beside quantum ideal / noisy / fixed %. A tilted control strip holds the one **NOISE slider** (5 detents, values from `index.json noise_p2`), the **FIX** button (mitigation on/off: values and arrows switch to mitigated, blue), and **Next patient**. Press or drag with controller ray + trigger.
+- **CT viewer (centre, plinth):** the real 28x28x28 nodule density volume, windowed to **grayscale** (`CT.windowLo/Hi`), drawn as ONE opaque InstancedMesh of surface-shell voxels (threshold `CT.threshold`, auto-raised to stay under `CT.maxShell`). A **slice plane** (drag the slider on the plinth) hides voxels nearer than the plane and shows the real cross-section as a 28x28 grayscale texture; the same slice is shown on the wall **slice monitor**. Voxels are sorted by slice so the cut is just an instance count.
+- **Lung (left, on a stand):** translucent **procedural** lung (5 ellipsoid lobes, trachea, bronchi; no external asset or licence) with the nodule glowing at a plausible spot. Decorative orientation only; no numbers come from it.
+- **Qubit readout (right rack):** 4 translucent qubit spheres in a row, each with a Bloch arrow from `bloch` (grey ghost = ideal, red = noisy, blue = fixed). Arrows shrink and grow live with the noise level.
+- **Poster (back wall):** purpose and the 3-step flow. The "Research prototype. Not a diagnosis." plate is on the wall and on the desk.
+- **Locomotion:** LEFT stick smooth walk, RIGHT stick 30-degree snap turn (`useXRControllerLocomotion` on `XROrigin`), clamped to the room and kept out of the desk. No teleport, no camera shake. Controller haptics are guarded (best effort). Web Audio hum/click/rise stays wired.
+- **Files:** `web/src/vr/VRRoom.jsx` (scene + interactions), `Environment.jsx` (shell, desk, monitors), `CTVolume.jsx` (CT volume + slice), `Lung.jsx`, `vrConfig.js` (all layout/threshold constants), `useSavedResults.js`, `audio.js`.
 
 ## Colour code (same as website)
 Ideal = grey. Noisy = red. Fixed (mitigated/corrected) = blue. Classical = white. Trust verdict = green/amber/red.
@@ -91,7 +96,7 @@ One ambient hum, clean at zero noise, detunes smoothly as noise rises. Soft clic
 - [ ] Dial, mitigation pad and Error Correction pad work with the controllers
 - [ ] Every displayed number matches the saved JSON
 - [ ] Research-prototype plate visible in every station
-- [ ] No locomotion, no flashing, text readable
+- [ ] Stick walk + snap turn work, no flashing, text readable
 - [ ] Website still works unchanged
 
 ## Do not
