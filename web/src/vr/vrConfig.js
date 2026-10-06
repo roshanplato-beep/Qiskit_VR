@@ -115,3 +115,22 @@ export const NOISE = {
 // Research-prototype plate — shown in EVERY scene (hard constraint).
 // ---------------------------------------------------------------------------
 export const DISCLAIMER = 'Research prototype. Not a diagnosis.'
+
+// ---------------------------------------------------------------------------
+// NOISE STORM DIAL (station 3) — presentational knobs only. Detent *values*
+// come from the saved index.json noise_p2; the dial has one detent per level.
+// ---------------------------------------------------------------------------
+export const DIAL = {
+  centerHeight: 1.2, // dial centre height (chest height)
+  radius: 0.26, // knob radius (m)
+  arcDeg: 240, // total sweep from first to last detent
+  grabReach: 0.4, // controller must be within this of dial centre to grab
+  detentMarkerRadius: 0.035, // ray-clickable detent marker
+  detentRingRadius: 0.36, // markers sit on this radius
+  followDamp: 14, // knob easing toward its target angle (1/s)
+  colorDamp: 3, // slow colour fades, never flashes (< 3 Hz)
+  tintMax: 0.9, // red point-light intensity at max noise
+  tintHeight: 2.2, // red storm light height
+  hapticStrength: 0.6, // 0..1
+  hapticMs: 40,
+}

@@ -11,6 +11,7 @@ import { Label } from '../components/Plate.jsx'
 import NoduleChamber from './NoduleChamber.jsx'
 import QuantumCore from './QuantumCore.jsx'
 import VerdictDeck from './VerdictDeck.jsx'
+import NoiseStorm from './NoiseStorm.jsx'
 import { useSavedResults } from './useSavedResults.js'
 import { ROOM, STATIONS, COLORS } from './vrConfig.js'
 
@@ -88,9 +89,13 @@ export default function VRRoom() {
           {/* Reserved slots (later dispatch) — labelled placeholders so the
               room reads as complete and the layout is fixed. */}
           <Station angle={STATIONS.noiseStorm.angle}>
-            <Label size={0.05} color={COLORS.textDim} position={[0, 1.4, 0]}>
-              Noise Storm — coming soon
-            </Label>
+            <NoiseStorm
+              noiseIndex={data.noiseIndex}
+              setNoiseIndex={data.setNoiseIndex}
+              noiseLevels={data.noiseLevels}
+              noiseValue={data.noiseValue}
+              run={data.run}
+            />
           </Station>
           <Station angle={STATIONS.repairBay.angle}>
             <Label size={0.05} color={COLORS.textDim} position={[0, 1.4, 0]}>
