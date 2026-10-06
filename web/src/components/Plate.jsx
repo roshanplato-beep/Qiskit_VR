@@ -4,7 +4,7 @@
 // arm's length.
 
 import { Text } from '@react-three/drei'
-import { COLORS, DISCLAIMER } from '../vr/vrConfig.js'
+import { COLORS } from '../vr/vrConfig.js'
 
 // A flat rounded-ish panel (plane) with a dark backing.
 export function Panel({ width = 0.9, height = 0.28, color = '#1b1e25', opacity = 0.92, children, ...props }) {
@@ -42,16 +42,5 @@ export function Label({
     >
       {children}
     </Text>
-  )
-}
-
-// The research-prototype plate. Must be visible in EVERY VR scene.
-export function DisclaimerPlate(props) {
-  return (
-    <Panel width={0.9} height={0.16} color="#2a1414" opacity={0.95} {...props}>
-      <Label size={0.05} color="#ff8a80" position={[0, 0, 0.003]}>
-        {DISCLAIMER}
-      </Label>
-    </Panel>
   )
 }

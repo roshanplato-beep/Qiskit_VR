@@ -3,7 +3,7 @@
 // unsupported (SPEC). Page HTML never appears inside the headset; everything
 // in VR is drawn by VRRoom.
 //
-// This increment keeps the site minimal (title, disclaimer, Enter VR). The
+// This increment keeps the site minimal (title, Enter VR). The
 // full website view is a later dispatch.
 
 import { Canvas } from '@react-three/fiber'
@@ -27,7 +27,6 @@ export default function App() {
             Quantum Uncertainty-aware Research Environment — how far can you trust a quantum
             medical answer?
           </p>
-          <p className="disclaimer">Research prototype. Not a diagnosis.</p>
         </div>
         <div className="actions">
           {supported === true && (

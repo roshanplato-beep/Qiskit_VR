@@ -49,6 +49,5 @@ the preview.
 
 ### Notes
 
-- Every scene shows "Research prototype. Not a diagnosis."
 - The VR view shows saved precomputed results. It makes no claim that VR
   improves diagnosis or that quantum beats classical.

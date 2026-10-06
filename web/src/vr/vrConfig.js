@@ -88,11 +88,6 @@ export const NOISE = {
 }
 
 // ---------------------------------------------------------------------------
-// Research-prototype plate — shown in EVERY scene (hard constraint).
-// ---------------------------------------------------------------------------
-export const DISCLAIMER = 'Research prototype. Not a diagnosis.'
-
-// ---------------------------------------------------------------------------
 // ONE GIANT SCAN — the single room. Presentational knobs only; every number
 // shown still comes from the saved JSON.
 // ---------------------------------------------------------------------------
@@ -155,12 +150,13 @@ export const CT = {
 export const SLICE_MONITOR = { position: [1.0, 1.75, -4.5], size: 1.0 }
 export const LUNG = { position: [-2.0, 2.0, -3.7], yaw: 0.3, scale: 0.8 }
 export const QUBITS = {
-  position: [1.3, 0, -1.1], // front-right of spawn, in clear view
-  yaw: -0.87, // faces the spawn point
-  spacing: 0.55,
+  position: [2.5, 0, -2.9], // front-right of spawn, clear of the comparison monitor
+  yaw: -0.67, // faces the spawn point
+  spacing: 0.85, // column gap (2x2 grid)
+  rowSpacing: 0.8,
   sphereRadius: 0.24,
   arrowScale: 2.5, // BlochArrow draws 0.16 m per unit -> a full arrow is 0.4 m
-  height: 1.78,
+  height: 2.55, // grid centre, above the desk monitors
   minVisual: 0.25, // shortest visual arrow (fraction of full) so it never vanishes
   floorRatio: 0.4, // saved |noisy|/|ideal| at or below this draws as the minimum
 }

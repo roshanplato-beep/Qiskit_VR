@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "description": "QURE Lab — Quantum Uncertainty-aware Research Environment. Web app + WebXR VR mode over precomputed Qiskit results. Research prototype, not a diagnosis.",
+  "description": "QURE Lab — Quantum Uncertainty-aware Research Environment. Web app + WebXR VR mode over precomputed Qiskit results.",
   "scripts": {
     "dev": "vite",
     "dev:host": "vite --host",

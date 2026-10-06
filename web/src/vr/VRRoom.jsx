@@ -18,7 +18,7 @@ import { OrbitControls } from '@react-three/drei'
 import { XROrigin, useXR, useXRControllerLocomotion } from '@react-three/xr'
 import * as THREE from 'three'
 import BlochArrow from '../components/BlochArrow.jsx'
-import { Panel, Label, DisclaimerPlate } from '../components/Plate.jsx'
+import { Panel, Label } from '../components/Plate.jsx'
 import * as sfx from './audio.js'
 import { useSavedResults, resolveTrust } from './useSavedResults.js'
 import CTVolume, { useSliceTexture } from './CTVolume.jsx'
@@ -277,11 +277,11 @@ const unit = (v, len) => {
   return m < 1e-6 ? [0, 0, 0] : v.map((c) => (c / m) * len)
 }
 
-function Qubit({ n, x, ideal, current, color }) {
+function Qubit({ n, x, y = 0, ideal, current, color }) {
   const full = useMemo(() => (ideal ? unit(ideal, 1) : null), [ideal])
   const cur = useMemo(() => (current && ideal ? unit(current, visualLen(current, ideal)) : null), [current, ideal])
   return (
-    <group position={[x, 0, 0]}>
+    <group position={[x, y, 0]}>
       <mesh>
         <sphereGeometry args={[QUBITS.sphereRadius, 20, 14]} />
         <meshStandardMaterial color="#3a4a80" roughness={0.4} transparent opacity={0.25} depthWrite={false} />
@@ -295,43 +295,26 @@ function Qubit({ n, x, ideal, current, color }) {
   )
 }
 
-// 4-qubit analysis rack, floating front-right of spawn, angled toward it.
+// 4-qubit analysis rack (2x2), floating right of the desk monitors, angled toward spawn.
 function QubitRack({ run, fixed, noise01 }) {
   const bloch = run?.bloch
   const arrows = fixed ? bloch?.mitigated : bloch?.noisy
   const color = fixed ? COLORS.fixed : noise01 > 0 ? COLORS.noisy : COLORS.ideal
-  const w = QUBITS.spacing * 3 + 0.6
   return (
     <group position={QUBITS.position} rotation={[0, QUBITS.yaw, 0]}>
-      <mesh position={[0, 0.7, -0.05]}>
-        <boxGeometry args={[0.08, 1.4, 0.08]} />
-        <meshStandardMaterial color="#2f3541" />
-      </mesh>
-      <mesh position={[0, 1.4, -0.05]}>
-        <boxGeometry args={[w, 0.05, 0.12]} />
-        <meshStandardMaterial color="#3a404c" roughness={0.6} />
-      </mesh>
       <group position={[0, QUBITS.height, 0]}>
         {[0, 1, 2, 3].map((i) => (
           <Qubit
             key={i}
             n={i + 1}
-            x={(i - 1.5) * QUBITS.spacing}
+            x={(i % 2 - 0.5) * QUBITS.spacing}
+            y={(i < 2 ? 0.5 : -0.5) * QUBITS.rowSpacing}
             ideal={bloch?.ideal?.[i]}
             current={arrows?.[i] ?? bloch?.ideal?.[i]}
             color={color}
           />
         ))}
       </group>
-      <Label size={0.1} color={COLORS.accent} position={[0, 2.4, 0]} maxWidth={2.2}>
-        QUBITS · watch the arrows
-      </Label>
-      <Label size={0.075} color={COLORS.text} position={[0, 1.3, 0]} maxWidth={2.3}>
-        More noise = shorter arrows. FIX grows them back.
-      </Label>
-      <Label size={0.07} color={COLORS.textDim} position={[0, 1.18, 0]} maxWidth={2.3}>
-        Grey ghost = ideal · Red = noisy · Blue = fixed
-      </Label>
     </group>
   )
 }
@@ -339,16 +322,22 @@ function QubitRack({ run, fixed, noise01 }) {
 // Purpose poster, top of the back wall.
 function Poster() {
   return (
-    <group position={[0, 2.9, BACK_Z + 0.03]}>
-      <Panel width={5.2} height={0.8} color="#12151b" opacity={1} />
-      <Label size={0.15} color={COLORS.text} position={[0, 0.27, 0.003]} maxWidth={5}>
+    <group position={[0, 2.93, BACK_Z + 0.03]}>
+      <Panel width={5.2} height={0.9} color="#12151b" opacity={1} />
+      <Label size={0.14} color={COLORS.text} position={[0, 0.38, 0.003]} maxWidth={5}>
         1 READ the CT  →  2 add NOISE  →  3 press FIX
       </Label>
-      <Label size={0.12} color={COLORS.accent} position={[0, 0.03, 0.003]} maxWidth={5}>
+      <Label size={0.11} color={COLORS.accent} position={[0, 0.22, 0.003]} maxWidth={5}>
         QURE Lab explains how far you can trust a noisy quantum computer's medical answer.
       </Label>
-      <Label size={0.1} color={COLORS.textDim} position={[0, -0.22, 0.003]} maxWidth={5}>
-        Noisy quantum answers need error mitigation before you would trust them. Not a diagnostic tool.
+      <Label size={0.085} color={COLORS.textDim} position={[0, 0.07, 0.003]} maxWidth={5}>
+        Noisy quantum answers need error mitigation before you would trust them.
+      </Label>
+      <Label size={0.085} color={COLORS.text} position={[0, -0.1, 0.003]} maxWidth={5}>
+        QUBITS (right): more noise = shorter arrows. FIX grows them back.
+      </Label>
+      <Label size={0.075} color={COLORS.textDim} position={[0, -0.26, 0.003]} maxWidth={5}>
+        Grey ghost = ideal · Red = noisy · Blue = fixed
       </Label>
     </group>
   )
@@ -491,9 +480,6 @@ export default function VRRoom() {
           />
 
           <QubitRack run={data.run} fixed={fixed} noise01={noise01} />
-
-          <DisclaimerPlate position={[0, 0.92, DESK.z + 0.6]} rotation={[-1.0, 0, 0]} />
-          <DisclaimerPlate position={[2.3, 2.5, BACK_Z + 0.03]} scale={[1.6, 1.6, 1]} />
         </>
       )}
     </>

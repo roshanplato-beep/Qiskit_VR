@@ -8,7 +8,7 @@ Add a VR mode to the existing web app **QURE Lab**. VR must run in the **Meta Qu
 
 Pitch line for VR: "Don't read how noisy a quantum computer is. Stand in it."
 
-This is a **research prototype, not a diagnostic tool**. A plate reading **"Research prototype. Not a diagnosis."** must be visible in every VR scene.
+This is a **research prototype, not a diagnostic tool**.
 
 ## What QURE Lab is
 A web app showing how far you can trust a quantum medical answer. A 4-qubit Qiskit classifier estimates whether a lung nodule (NoduleMNIST3D, 28x28x28 CT cube) is malignant. A noise slider degrades the answer (confidence drops, each qubit's Bloch arrow shrinks). Error mitigation (readout correction + zero-noise extrapolation) and a 3-qubit error-correction demo recover it. Every result is shown three ways (ideal, noisy, fixed) beside a classical model, with a trust verdict (Trust, Caution, Refer). All numbers are precomputed offline in Qiskit and saved as JSON.
@@ -45,7 +45,7 @@ Replaces the earlier 5-station circular room and the "One Giant Scan" layout. On
 - **CT viewer (centre, plinth):** the real 28x28x28 nodule density volume, windowed to **grayscale** (`CT.windowLo/Hi`), drawn as ONE opaque InstancedMesh of surface-shell voxels (threshold `CT.threshold`, auto-raised to stay under `CT.maxShell`). A **slice plane** (drag the slider on the plinth) hides voxels nearer than the plane and shows the real cross-section as a 28x28 grayscale texture; the same slice is shown on the wall **slice monitor**. Voxels are sorted by slice so the cut is just an instance count.
 - **Lung (left, on a stand):** translucent **procedural** lung (5 ellipsoid lobes, trachea, bronchi; no external asset or licence) with the nodule glowing at a plausible spot. Decorative orientation only; no numbers come from it.
 - **Qubit readout (right rack):** 4 translucent qubit spheres in a row, each with a Bloch arrow from `bloch` (grey ghost = ideal, red = noisy, blue = fixed). Arrows shrink and grow live with the noise level.
-- **Poster (back wall):** purpose and the 3-step flow. The "Research prototype. Not a diagnosis." plate is on the wall and on the desk.
+- **Poster (back wall):** purpose and the 3-step flow.
 - **Locomotion:** LEFT stick smooth walk, RIGHT stick 30-degree snap turn (`useXRControllerLocomotion` on `XROrigin`), clamped to the room and kept out of the desk. No teleport, no camera shake. Controller haptics are guarded (best effort). Web Audio hum/click/rise stays wired.
 - **Files:** `web/src/vr/VRRoom.jsx` (scene + interactions), `Environment.jsx` (shell, desk, monitors), `CTVolume.jsx` (CT volume + slice), `Lung.jsx`, `vrConfig.js` (all layout/threshold constants), `useSavedResults.js`, `audio.js`.
 
