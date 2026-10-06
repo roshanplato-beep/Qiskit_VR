@@ -12,6 +12,8 @@ import NoduleChamber from './NoduleChamber.jsx'
 import QuantumCore from './QuantumCore.jsx'
 import VerdictDeck from './VerdictDeck.jsx'
 import NoiseStorm from './NoiseStorm.jsx'
+import RepairBay from './RepairBay.jsx'
+import { useQec } from './useQec.js'
 import { useSavedResults } from './useSavedResults.js'
 import { ROOM, STATIONS, COLORS } from './vrConfig.js'
 
@@ -34,6 +36,7 @@ function Room() {
 
 export default function VRRoom() {
   const data = useSavedResults()
+  const { qec, error: qecError } = useQec()
   const session = useXR((s) => s.session)
   const inVR = !!session
 
@@ -98,9 +101,7 @@ export default function VRRoom() {
             />
           </Station>
           <Station angle={STATIONS.repairBay.angle}>
-            <Label size={0.05} color={COLORS.textDim} position={[0, 1.4, 0]}>
-              Repair Bay — coming soon
-            </Label>
+            <RepairBay run={data.run} index={data.index} qec={qec} qecError={qecError} />
           </Station>
         </>
       )}

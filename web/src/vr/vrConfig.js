@@ -134,3 +134,35 @@ export const DIAL = {
   hapticStrength: 0.6, // 0..1
   hapticMs: 40,
 }
+
+// ---------------------------------------------------------------------------
+// REPAIR block — Repair Bay (SPEC station 4) presentational knobs only.
+// Every number SHOWN comes from index.json / the run / qec.json at runtime.
+// ---------------------------------------------------------------------------
+export const REPAIR = {
+  mitigationX: -0.72, // local x of the Mitigation pad group
+  correctionX: 0.55, // local x of the Error Correction pad group
+  padY: 0.95, // pad height (waist)
+  padRadius: 0.14,
+  padSegments: 20,
+  arrowSpacing: 0.2, // spacing of the 4 mini Bloch arrows on the mitigation pad
+  arrowY: 1.4,
+  pulseSeconds: 0.9, // blue pulse ring duration on mitigation toggle (<3 Hz)
+  tankWidth: 0.7,
+  tankHeight: 0.7,
+  tankDepth: 0.3,
+  tankY: 1.45, // tank centre height
+  tankOpenDamp: 6, // open/close fade-scale speed
+  qubitRadius: 0.07,
+  lightRadius: 0.03,
+  sphereSegments: 14,
+  leverX: 0.55, // lever track x, relative to the correction group
+  leverYMin: 1.1,
+  leverYMax: 1.75,
+  // Event replay phase lengths in seconds: error, syndrome, decode, result.
+  // Each >= 0.9 s so nothing changes faster than ~1 Hz (no flashing > 3 Hz).
+  phaseSeconds: [1.0, 1.0, 1.0, 1.6],
+  colorDamp: 8, // colour fade speed
+  hapticIntensity: 0.4,
+  hapticMs: 40,
+}
