@@ -10,6 +10,7 @@ import { Station } from './helpers.jsx'
 import { Label } from '../components/Plate.jsx'
 import NoduleChamber from './NoduleChamber.jsx'
 import QuantumCore from './QuantumCore.jsx'
+import VerdictDeck from './VerdictDeck.jsx'
 import { useSavedResults } from './useSavedResults.js'
 import { ROOM, STATIONS, COLORS } from './vrConfig.js'
 
@@ -77,6 +78,11 @@ export default function VRRoom() {
           {/* Station 2 — Quantum Core (to the right) */}
           <Station angle={STATIONS.quantumCore.angle}>
             <QuantumCore run={data.run} noiseValue={data.noiseValue} />
+          </Station>
+
+          {/* Station 5 — Verdict Deck */}
+          <Station angle={STATIONS.verdictDeck.angle}>
+            <VerdictDeck run={data.run} patient={data.patient} model={data.model} />
           </Station>
 
           {/* Reserved slots (later dispatch) — labelled placeholders so the
