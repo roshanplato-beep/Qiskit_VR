@@ -127,3 +127,39 @@ export const CONSOLE = {
 }
 export const MOVE = { speed: 1.6, snapDegrees: 30, deadZone: 0.6 }
 export const WALL = { z: -6.4, y: 2.3, width: 4.6, height: 2.3 }
+
+// ---------------------------------------------------------------------------
+// RADIOLOGY READING ROOM — replaces the "One Giant Scan" layout. Presentational
+// knobs only; every number shown still comes from the saved JSON.
+// Spawn is (0,0,0) facing -Z. Everything below is laid out so it is readable
+// from there with no overlaps.
+// ---------------------------------------------------------------------------
+export const READING = {
+  room: { width: 9, depth: 7, height: 3.1, centerZ: -1.1 },
+  limit: { x: 4.0, zMin: -2.9, zMax: 2.0 },
+  // walkable obstacle: the desk footprint (centre x/z + half extents)
+  deskBox: { x: 0, z: -1.5, hx: 1.8, hz: 0.55 },
+}
+export const DESK = { z: -1.5, width: 3.2, depth: 0.8, top: 0.75 }
+// CT viewer: grayscale voxel volume on a plinth, with a slice plane.
+export const CT = {
+  position: [-0.35, 1.55, -3.3],
+  scale: 3.6, // 0.34 m cube x3.6 = 1.22 m across
+  threshold: 110, // starting density cut-off (raised automatically if too many voxels)
+  maxShell: 5500, // max instanced voxels (surface shell only)
+  windowLo: 25, // CT "window": density at/below this is black
+  windowHi: 235, // at/above this is white
+  startSlice: 14,
+  track: { y: 0.92, half: 0.62 },
+}
+export const SLICE_MONITOR = { position: [1.0, 1.75, -4.5], size: 1.0 }
+export const LUNG = { position: [-2.0, 2.0, -3.7], yaw: 0.3, scale: 0.8 }
+export const QUBITS = {
+  position: [2.6, 0, -2.5],
+  yaw: -0.7, // faces the spawn point
+  spacing: 0.5,
+  sphereRadius: 0.17,
+  arrowScale: 1.1, // BlochArrow draws 0.16 m per unit; keeps the arrow inside the sphere
+  height: 1.25,
+}
+export const NOISE_TRACK = { half: 0.95, markerRadius: 0.05, knobRadius: 0.075, damp: 12 }
