@@ -7,18 +7,21 @@
 // ray + trigger on a detent marker (also works with a mouse on desktop).
 // Everything fades with damping; nothing blinks (well under 3 Hz).
 
-import { useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
-import { useXRInputSourceState } from '@react-three/xr'
+import { useXR, useXRInputSourceState } from '@react-three/xr'
 import * as THREE from 'three'
 import { Panel, Label } from '../components/Plate.jsx'
 import { Hint } from './helpers.jsx'
 import { resolveTrust } from './useSavedResults.js'
 import { DIAL, COLORS, trustColor } from './vrConfig.js'
+import * as sfx from './audio.js'
+import { stationWorld } from './stationPos.js'
 
 const ARC = (DIAL.arcDeg * Math.PI) / 180
 const _p = new THREE.Vector3()
 const _c = new THREE.Color()
+const DIAL_POS = stationWorld('noiseStorm', [0, DIAL.centerHeight, 0])
 const BASE_BG = new THREE.Color(COLORS.roomWall)
 const RED_BG = new THREE.Color('#3a1412')
 
@@ -59,6 +62,23 @@ export default function NoiseStorm({ noiseIndex, setNoiseIndex, noiseLevels = []
   verdictRef.current = verdict
   const indexRef = useRef(noiseIndex)
   indexRef.current = noiseIndex
+
+  // Audio: hum tracks noise (clean at 0); detent click on each change. No-ops
+  // until sfx.init() has run (Enter VR click / XR session start).
+  const inSession = useXR((s) => !!s.session)
+  const maxNoise = n ? noiseLevels[n - 1] : 0
+  const noise01 = maxNoise > 0 && typeof noiseValue === 'number' ? noiseValue / maxNoise : 0
+  const firstIdx = useRef(true)
+  useEffect(() => {
+    if (inSession) sfx.ambientHum(noise01, DIAL_POS)
+  }, [noise01, inSession])
+  useEffect(() => {
+    if (firstIdx.current) {
+      firstIdx.current = false
+      return
+    }
+    sfx.detentClick(DIAL_POS)
+  }, [noiseIndex])
 
   // Select a detent: only ever a real saved level index.
   const choose = (i, src) => {

@@ -4,6 +4,7 @@
 // by a later dispatch. No locomotion, no teleport: fixed spawn at standing
 // height (SPEC).
 
+import { useEffect } from 'react'
 import { OrbitControls } from '@react-three/drei'
 import { XROrigin, useXR } from '@react-three/xr'
 import { Station } from './helpers.jsx'
@@ -13,9 +14,24 @@ import QuantumCore from './QuantumCore.jsx'
 import VerdictDeck from './VerdictDeck.jsx'
 import NoiseStorm from './NoiseStorm.jsx'
 import RepairBay from './RepairBay.jsx'
+import * as sfx from './audio.js'
 import { useQec } from './useQec.js'
 import { useSavedResults } from './useSavedResults.js'
 import { ROOM, STATIONS, COLORS } from './vrConfig.js'
+
+// Starts audio when an XR session begins (covers headset-initiated VR; the
+// Enter VR button also calls init on its click). Listener = room centre,
+// facing -Z. Rendered before the stations so init runs before their effects.
+function AudioBridge() {
+  const inSession = useXR((s) => !!s.session)
+  useEffect(() => {
+    if (!inSession) return
+    sfx.init()
+    sfx.setListener({ x: 0, y: ROOM.spawnHeight, z: 0 }, { x: 0, y: 0, z: -1 })
+    return () => sfx.stopHum()
+  }, [inSession])
+  return null
+}
 
 function Room() {
   return (
@@ -48,6 +64,7 @@ export default function VRRoom() {
       <pointLight position={[0, 2.6, 0]} intensity={0.5} color={COLORS.accent} />
 
       <Room />
+      <AudioBridge />
 
       {/* fixed spawn at standing height, centre of the room */}
       <XROrigin position={[0, 0, 0]} />

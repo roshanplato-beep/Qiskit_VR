@@ -10,6 +10,7 @@ import { Canvas } from '@react-three/fiber'
 import { XR, createXRStore, useXRSessionModeSupported } from '@react-three/xr'
 import VRRoom from './vr/VRRoom.jsx'
 import { ROOM } from './vr/vrConfig.js'
+import * as sfx from './vr/audio.js'
 
 // One XR store for the app. The Enter-VR button calls store.enterVR().
 const store = createXRStore()
@@ -30,7 +31,10 @@ export default function App() {
         </div>
         <div className="actions">
           {supported === true && (
-            <button className="enter-vr" onClick={() => store.enterVR()}>
+            <button className="enter-vr" onClick={() => {
+                sfx.init() // user gesture: unlock Web Audio
+                store.enterVR()
+              }}>
               Enter VR
             </button>
           )}

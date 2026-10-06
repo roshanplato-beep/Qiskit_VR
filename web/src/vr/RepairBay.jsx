@@ -15,6 +15,11 @@ import { Panel, Label, DisclaimerPlate } from '../components/Plate.jsx'
 import BlochArrow from '../components/BlochArrow.jsx'
 import { Hint } from './helpers.jsx'
 import { COLORS, REPAIR as R } from './vrConfig.js'
+import * as sfx from './audio.js'
+import { stationWorld } from './stationPos.js'
+
+const PAD_POS = stationWorld('repairBay', [R.mitigationX, R.padY, 0.2])
+const TANK_POS = stationWorld('repairBay', [R.correctionX, R.tankY, 0])
 
 const NA = 'n/a (missing in saved data)'
 const f3 = (v) => (typeof v === 'number' ? v.toFixed(3) : NA)
@@ -176,7 +181,12 @@ function MitigationPad({ run, index }) {
         </Panel>
       )}
 
-      <Pad position={[0, R.padY - 0.1, 0.2]} color={COLORS.fixed} active={fixed} onPress={() => setFixed((v) => !v)} />
+      <Pad position={[0, R.padY - 0.1, 0.2]} color={COLORS.fixed} active={fixed}
+        onPress={() => {
+          if (!fixed && hasMitigated) sfx.mitigationRise(PAD_POS)
+          setFixed((v) => !v)
+        }}
+      />
       <Hint position={[0, R.padY - 0.2, 0.2]}>point + trigger on the pad: noisy ↔ fixed</Hint>
     </group>
   )
@@ -268,6 +278,11 @@ function Tank({ qec, open }) {
     setPhase(0)
     t.current = 0
   }, [sel])
+
+  // chime when the decoder phase begins on a saved event it actually corrects
+  useEffect(() => {
+    if (open && ev && phase === 2 && ev.corrected_qubit != null) sfx.correctionChime(TANK_POS)
+  }, [open, phase, evI]) // eslint-disable-line react-hooks/exhaustive-deps
 
   useFrame((_, dt) => {
     const g = grp.current
