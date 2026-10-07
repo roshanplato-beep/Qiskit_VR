@@ -13,6 +13,8 @@ import { Label } from './xr/Label';
 import { LabAppears } from './scenes/LabAppears';
 import { CircuitSculpture } from './scenes/CircuitSculpture';
 import { WallField, WallPlinthControls } from './scenes/DecisionWall';
+import { Verdict } from './scenes/Verdict';
+import { Tour } from './tour/Tour';
 import { ControlBoard } from './xr/ControlBoard';
 
 function Room() {
@@ -50,7 +52,7 @@ function ErrorPanel({ msg }: { msg: string }) {
 
 function Controls() {
   const inXR = useXR((s) => !!s.session);
-  return inXR ? null : <OrbitControls target={[0, 1.0, -0.6]} maxPolarAngle={Math.PI * 0.55} minDistance={0.4} maxDistance={4} />;
+  return inXR ? null : <OrbitControls target={[0, 1.1, -0.8]} maxPolarAngle={Math.PI * 0.55} minDistance={0.4} maxDistance={4} />;
 }
 
 function World() {
@@ -68,10 +70,11 @@ function World() {
       {loaded && scene === 'wall' && <WallField />}
       {loaded && (
         <Placement>
-          {/* Scenes B (circuit), C (wall) and D (verdict) are built by other agents and mount here per `scene`. */}
           {scene === 'lab' && view === 'encode' && <LabAppears />}
           {scene === 'lab' && view === 'circuit' && <CircuitSculpture />}
           {scene === 'wall' && <WallPlinthControls />}
+          {scene === 'verdict' && <Verdict />}
+          <Tour />
           <ControlBoard />
         </Placement>
       )}
@@ -97,7 +100,7 @@ export default function App() {
           {err}
         </div>
       )}
-      <Canvas camera={{ position: [0, 1.55, 0.9], fov: 60, near: 0.1, far: 35 }} gl={{ antialias: true }}
+      <Canvas camera={{ position: [0, 1.6, 1.5], fov: 60, near: 0.1, far: 35 }} gl={{ antialias: true }}
         onPointerMissed={() => {}}>
         <XR store={xrStore}>
           <World />
