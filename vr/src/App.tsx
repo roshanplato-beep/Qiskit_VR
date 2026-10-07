@@ -12,6 +12,7 @@ import { DesktopBar, SampleBanner } from './xr/DesktopBar';
 import { Label } from './xr/Label';
 import { LabAppears } from './scenes/LabAppears';
 import { CircuitSculpture } from './scenes/CircuitSculpture';
+import { WallField, WallPlinthControls } from './scenes/DecisionWall';
 import { ControlBoard } from './xr/ControlBoard';
 
 function Room() {
@@ -64,11 +65,13 @@ function World() {
       <directionalLight position={[1, 3, 1]} intensity={0.8} />
       <SampleBannerInWorld />
       {err && <ErrorPanel msg={err} />}
+      {loaded && scene === 'wall' && <WallField />}
       {loaded && (
         <Placement>
           {/* Scenes B (circuit), C (wall) and D (verdict) are built by other agents and mount here per `scene`. */}
           {scene === 'lab' && view === 'encode' && <LabAppears />}
           {scene === 'lab' && view === 'circuit' && <CircuitSculpture />}
+          {scene === 'wall' && <WallPlinthControls />}
           <ControlBoard />
         </Placement>
       )}

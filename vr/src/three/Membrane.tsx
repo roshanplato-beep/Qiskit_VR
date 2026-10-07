@@ -10,14 +10,19 @@ export interface MembraneProps {
   color?: string;          // base tint
   rippleSpeed?: number;    // plane units per second
   rippleLife?: number;     // seconds
+  /** if set, the membrane is a vertical cylinder section of this radius and arc (rad), centred on -z, bulging away from the origin */
+  radius?: number;
+  arc?: number;
 }
 
 const MAX_HITS = 12;
 
 const vert = /* glsl */ `
+uniform float uFlip;
+uniform vec2 uSize;
 varying vec2 vPos; varying vec3 vN; varying vec3 vV;
 void main(){
-  vPos = position.xy;
+  vPos = vec2((0.5 - uv.x) * uSize.x * uFlip + (uv.x - 0.5) * uSize.x * (1.0 - uFlip), (uv.y - 0.5) * uSize.y);
   vec4 mv = modelViewMatrix * vec4(position,1.0);
   vN = normalize(normalMatrix * normal);
   vV = normalize(-mv.xyz);
@@ -45,11 +50,13 @@ void main(){
 }`;
 
 export const Membrane = forwardRef<MembraneHandle, MembraneProps>(function Membrane(
-  { width = 1, height = 0.6, position, rotation, color = '#7fd4ff', rippleSpeed = 0.35, rippleLife = 1.4 }, ref,
+  { width = 1, height = 0.6, position, rotation, color = '#7fd4ff', rippleSpeed = 0.35, rippleLife = 1.4, radius, arc }, ref,
 ) {
   const next = useRef(0);
   const uniforms = useMemo(() => ({
     uColor: { value: new THREE.Color(color) },
+    uSize: { value: new THREE.Vector2(radius && arc ? radius * arc : width, height) },
+    uFlip: { value: radius && arc ? 1 : 0 },
     uTime: { value: 0.01 },
     uSpeed: { value: rippleSpeed },
     uLife: { value: rippleLife },
@@ -69,7 +76,9 @@ export const Membrane = forwardRef<MembraneHandle, MembraneProps>(function Membr
 
   return (
     <mesh position={position} rotation={rotation}>
-      <planeGeometry args={[width, height, 1, 1]} />
+      {radius && arc
+        ? <cylinderGeometry args={[radius, radius, height, 48, 1, true, Math.PI - arc / 2, arc]} />
+        : <planeGeometry args={[width, height, 1, 1]} />}
       <shaderMaterial uniforms={uniforms} vertexShader={vert} fragmentShader={frag}
         transparent depthWrite={false} side={THREE.DoubleSide} />
     </mesh>

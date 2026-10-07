@@ -22,6 +22,9 @@ export interface OrbFieldProps {
   sparkPositions?: ArrayLike<number>;
   orbColors?: ArrayLike<number>;
   sparkColors?: ArrayLike<number>;
+  /** pointer events on the orbs (instanceId = orb index) */
+  onOrbClick?: (i: number) => void;
+  onOrbHover?: (i: number | null) => void;
 }
 
 const _m = new THREE.Matrix4();
@@ -37,7 +40,7 @@ function put(mesh: THREE.InstancedMesh | null, i: number, x: number, y: number, 
 }
 
 export const OrbField = forwardRef<OrbFieldHandle, OrbFieldProps>(function OrbField(
-  { maxOrbs = 90, maxSparks = 450, orbRadius = 0.012, sparkRadius = 0.004, orbPositions, sparkPositions, orbColors, sparkColors }, ref,
+  { maxOrbs = 90, maxSparks = 450, orbRadius = 0.012, sparkRadius = 0.004, orbPositions, sparkPositions, orbColors, sparkColors, onOrbClick, onOrbHover }, ref,
 ) {
   const orbs = useRef<THREE.InstancedMesh>(null);
   const sparks = useRef<THREE.InstancedMesh>(null);
@@ -75,6 +78,7 @@ export const OrbField = forwardRef<OrbFieldHandle, OrbFieldProps>(function OrbFi
       for (const m of [orbs.current, sparks.current]) {
         if (!m) continue;
         m.instanceMatrix.needsUpdate = true;
+        m.boundingSphere = null; // instances move: recompute lazily for raycasting
         if (m.instanceColor) m.instanceColor.needsUpdate = true;
       }
     },
@@ -82,8 +86,11 @@ export const OrbField = forwardRef<OrbFieldHandle, OrbFieldProps>(function OrbFi
 
   return (
     <>
-      <instancedMesh ref={orbs} args={[orbGeo, orbMat, maxOrbs]} frustumCulled={false} />
-      <instancedMesh ref={sparks} args={[sparkGeo, sparkMat, maxSparks]} frustumCulled={false} />
+      <instancedMesh ref={orbs} args={[orbGeo, orbMat, maxOrbs]} frustumCulled={false}
+        onClick={onOrbClick ? (e) => { e.stopPropagation(); if (e.instanceId !== undefined) onOrbClick(e.instanceId); } : undefined}
+        onPointerMove={onOrbHover ? (e) => { e.stopPropagation(); onOrbHover(e.instanceId ?? null); } : undefined}
+        onPointerOut={onOrbHover ? () => onOrbHover(null) : undefined} />
+      <instancedMesh ref={sparks} args={[sparkGeo, sparkMat, maxSparks]} frustumCulled={false} raycast={() => null} />
     </>
   );
 });

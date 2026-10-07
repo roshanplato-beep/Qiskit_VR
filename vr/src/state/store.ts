@@ -20,6 +20,8 @@ export interface LabState {
   view: LabView;
   /** optional speechSynthesis narration for the tour (captions are always on) */
   speak: boolean;
+  /** true while a case chosen on the wall is being inspected in the lab (shows 'Back to wall') */
+  fromWall: boolean;
   seated: boolean;
   /** user placement of the lab: metres on the floor and yaw in radians (snapped to 15 deg) */
   rig: { x: number; z: number; yaw: number };
@@ -34,6 +36,7 @@ export interface LabState {
   setAblation: (a: boolean) => void;
   setView: (v: LabView) => void;
   setSpeak: (v: boolean) => void;
+  setFromWall: (v: boolean) => void;
   setSeated: (v: boolean) => void;
   setRig: (r: Partial<LabState['rig']>) => void;
   /** monotonically increasing; bumps whenever case or setting changes so scenes can replay pulses */
@@ -43,7 +46,7 @@ export interface LabState {
 export const useLab = create<LabState>((set) => ({
   bundle: null, derived: null, loadError: null,
   caseId: '', setting: 'N0', mitigation: 0, split: 'test', scene: 'lab', tourStep: 0,
-  ablation: false, view: 'encode', speak: false, seated: false, rig: { x: 0, z: -0.6, yaw: 0 }, tick: 0,
+  ablation: false, view: 'encode', speak: false, fromWall: false, seated: false, rig: { x: 0, z: -0.6, yaw: 0 }, tick: 0,
   setLoaded: (bundle, derived) => set((s) => ({
     bundle, derived, loadError: null,
     // keep a case from the URL if it exists, otherwise the first of the current split
@@ -64,6 +67,7 @@ export const useLab = create<LabState>((set) => ({
   setAblation: (ablation) => set((s) => ({ ablation, tick: s.tick + 1 })),
   setView: (view) => set((s) => ({ view, tick: s.tick + 1 })),
   setSpeak: (speak) => set({ speak }),
+  setFromWall: (fromWall) => set({ fromWall }),
   setSeated: (seated) => set({ seated }),
   setRig: (r) => set((s) => ({ rig: { ...s.rig, ...r } })),
 }));

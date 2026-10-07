@@ -65,7 +65,7 @@ export interface Derived {
   stats: Map<string, { flipShare: number; flagged: number; total: number }>;
 }
 
-export const DEPTH_SCALE = 2.0; // metres of depth per unit (score - threshold); stated on the legend
+export const DEPTH_SCALE = 0.8; // metres of depth per unit (score - threshold); stated on the legend
 
 export const keyOf = (split: Split, s: SettingId, mit: Mit) => `${split}|${s}|${mit}`;
 

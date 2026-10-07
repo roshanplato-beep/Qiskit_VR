@@ -26,6 +26,7 @@ export function ControlBoard() {
     btn('Verdict', 0.336, y, 0.15, () => s.setScene('verdict'), { active: s.scene === 'verdict', glyph: 'D' });
     y += 0.06;
     if (s.scene === 'lab') {
+      if (s.fromWall) { btn('Back to wall', 0.016, y, 0.475, () => { s.setFromWall(false); s.setScene('wall'); }, { glyph: '<' }); y += 0.06; }
       btn('Encoding', 0.016, y, 0.235, () => s.setView('encode'), { active: s.view === 'encode' });
       btn('Circuit', 0.256, y, 0.235, () => s.setView('circuit'), { active: s.view === 'circuit' });
       y += 0.06;
@@ -54,7 +55,7 @@ export function ControlBoard() {
     btn('Back to console', 0.016, y, 0.475, () => { window.location.href = webUrl(); });
     return it;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [s.scene, s.view, s.setting, s.mitigation, s.ablation, s.split, s.caseId, s.tourStep, s.speak, s.derived]);
+  }, [s.scene, s.view, s.setting, s.mitigation, s.ablation, s.split, s.caseId, s.tourStep, s.speak, s.derived, s.fromWall]);
   const h = Math.max(...items.map((i) => i.y + i.h)) + 0.02;
   return <CanvasBoard width={BOARD_W} height={h} title="Controls" items={items}
     position={[-0.98, 1.4 - h / 2 + 0.1, 0.1]} rotation={[0, 0.5, 0]} />;
