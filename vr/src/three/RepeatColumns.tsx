@@ -36,7 +36,7 @@ function Column({ v, H, dashed, x, glass }: { v: number; H: number; dashed: bool
   const segs = useMemo(() => {
     if (!dashed) return null;
     const out: [number, number][] = [];
-    const step = H / 6; // few segments: keeps draw calls low (<=6 per noisy column)
+    const step = H / 4; // few segments: keeps draw calls low (<=4 per noisy column)
     for (let y = 0; y < inside * H - 1e-6; y += step) out.push([y, Math.min(step * 0.62, inside * H - y)]);
     return out;
   }, [dashed, inside, H]);

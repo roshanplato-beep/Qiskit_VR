@@ -15,6 +15,7 @@ import { CircuitSculpture } from './scenes/CircuitSculpture';
 import { WallField, WallPlinthControls } from './scenes/DecisionWall';
 import { Verdict } from './scenes/Verdict';
 import { Tour } from './tour/Tour';
+import { PerfProbe } from './xr/PerfProbe';
 import { ControlBoard } from './xr/ControlBoard';
 
 function Room() {
@@ -79,6 +80,7 @@ function World() {
         </Placement>
       )}
       <Controls />
+      <PerfProbe />
     </>
   );
 }

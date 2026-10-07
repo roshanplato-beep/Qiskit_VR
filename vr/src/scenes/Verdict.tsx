@@ -65,7 +65,7 @@ ${b.ba.toFixed(3)}  (CI ${b.ci[0].toFixed(2)} - ${b.ci[1].toFixed(2)})`}
       ))}
       </group>
       <Panel3D width={0.46} height={0.3} position={[0.68, PLINTH_TOP + 0.35, 0.05]} rotation={[0, -0.45, 0]} tone="warn" title="Result" body={plaque} />
-      <Panel3D width={0.4} height={0.14} position={[-0.68, PLINTH_TOP + 0.3, 0.05]} rotation={[0, 0.45, 0]} tone="info" title="Disclaimer"
+      <Panel3D width={0.4} height={0.14} position={[0.66, PLINTH_TOP + 0.12, 0.1]} rotation={[0, -0.45, 0]} tone="info" title="Disclaimer"
         body="Research prototype. Simulated quantum execution. Not a medical device." />
     </group>
   );
