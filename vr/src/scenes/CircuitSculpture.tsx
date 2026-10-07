@@ -186,7 +186,7 @@ export function CircuitSculpture() {
       {/* four Bloch spheres: noiseless ghost (solid white) and gate-noisy arrow (dashed amber) */}
       {q.map((i) => (
         <BlochSphere key={i} b0={S.b0[i]} b={S.b[i]} radius={0.042} label={`q${i}`}
-          position={[-0.38 + i * 0.17, top + 0.56, 0]} />
+          position={[-0.36 + i * 0.21, top + 0.56, 0]} />
       ))}
       <Text position={[-0.46, top + 0.655, 0]} fontSize={0.013} color="#cfe8ff" anchorX="left" anchorY="bottom" maxWidth={0.92}>
         {'i  Arrows are shorter than 1 even without noise because the qubits are entangled; compare each to its solid ghost. Readout mitigation does not change the state, so there is no mitigated arrow.'}
