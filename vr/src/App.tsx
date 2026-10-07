@@ -11,6 +11,8 @@ import { Placement } from './xr/Placement';
 import { DesktopBar, SampleBanner } from './xr/DesktopBar';
 import { Label } from './xr/Label';
 import { LabAppears } from './scenes/LabAppears';
+import { CircuitSculpture } from './scenes/CircuitSculpture';
+import { ControlBoard } from './xr/ControlBoard';
 
 function Room() {
   // dark virtual lab room: floor grid + faint walls. Procedural only, no assets.
@@ -54,6 +56,7 @@ function World() {
   const loaded = useLab((s) => !!s.bundle);
   const err = useLab((s) => s.loadError);
   const scene = useLab((s) => s.scene);
+  const view = useLab((s) => s.view);
   return (
     <>
       <Room />
@@ -64,7 +67,9 @@ function World() {
       {loaded && (
         <Placement>
           {/* Scenes B (circuit), C (wall) and D (verdict) are built by other agents and mount here per `scene`. */}
-          {scene === 'lab' && <LabAppears />}
+          {scene === 'lab' && view === 'encode' && <LabAppears />}
+          {scene === 'lab' && view === 'circuit' && <CircuitSculpture />}
+          <ControlBoard />
         </Placement>
       )}
       <Controls />

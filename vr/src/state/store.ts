@@ -3,6 +3,7 @@ import type { Bundle, SettingId } from '../data/bundle';
 import type { Derived, Mit, Split } from '../data/derive';
 
 export type SceneId = 'lab' | 'wall' | 'verdict';
+export type LabView = 'encode' | 'circuit';
 
 export interface LabState {
   bundle: Bundle | null;
@@ -15,6 +16,10 @@ export interface LabState {
   scene: SceneId;
   tourStep: number;      // 0 = tour off, 1..8 = step
   ablation: boolean;
+  /** inside the lab scene: A (encoding) or B (circuit sculpture) */
+  view: LabView;
+  /** optional speechSynthesis narration for the tour (captions are always on) */
+  speak: boolean;
   seated: boolean;
   /** user placement of the lab: metres on the floor and yaw in radians (snapped to 15 deg) */
   rig: { x: number; z: number; yaw: number };
@@ -27,6 +32,8 @@ export interface LabState {
   setScene: (s: SceneId) => void;
   setTourStep: (n: number) => void;
   setAblation: (a: boolean) => void;
+  setView: (v: LabView) => void;
+  setSpeak: (v: boolean) => void;
   setSeated: (v: boolean) => void;
   setRig: (r: Partial<LabState['rig']>) => void;
   /** monotonically increasing; bumps whenever case or setting changes so scenes can replay pulses */
@@ -36,7 +43,7 @@ export interface LabState {
 export const useLab = create<LabState>((set) => ({
   bundle: null, derived: null, loadError: null,
   caseId: '', setting: 'N0', mitigation: 0, split: 'test', scene: 'lab', tourStep: 0,
-  ablation: false, seated: false, rig: { x: 0, z: -0.6, yaw: 0 }, tick: 0,
+  ablation: false, view: 'encode', speak: false, seated: false, rig: { x: 0, z: -0.6, yaw: 0 }, tick: 0,
   setLoaded: (bundle, derived) => set((s) => ({
     bundle, derived, loadError: null,
     // keep a case from the URL if it exists, otherwise the first of the current split
@@ -55,6 +62,8 @@ export const useLab = create<LabState>((set) => ({
   setScene: (scene) => set({ scene }),
   setTourStep: (tourStep) => set({ tourStep }),
   setAblation: (ablation) => set((s) => ({ ablation, tick: s.tick + 1 })),
+  setView: (view) => set((s) => ({ view, tick: s.tick + 1 })),
+  setSpeak: (speak) => set({ speak }),
   setSeated: (seated) => set({ seated }),
   setRig: (r) => set((s) => ({ rig: { ...s.rig, ...r } })),
 }));
